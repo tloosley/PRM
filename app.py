@@ -160,7 +160,7 @@ if st.session_state.get("last_preset", None) != preset:
 
 col5, col6 = st.columns(2)
 with col5:
-    demand_drop = st.slider("Demand Drop (%)", 0, 100, st.session_state["demand_drop"], step=5, key="demand_drop")
+    demand_drop = st.slider("Demand Drop (%)", 0, 100, step=5, key="demand_drop")
     payment_delay_months = st.slider("Payment Delay (Months)", 0, 6, st.session_state["payment_delay_months"], key="payment_delay_months")
 with col6:
     cost_increase = st.slider("Variable Cost Increase (%)", 0, 100, st.session_state["cost_increase"], step=5, key="cost_increase")
