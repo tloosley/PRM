@@ -8,7 +8,7 @@ with col2:
     st.image("PRM Logo.png", width=700)
 
 st.markdown("""
-This tool helps you simulate how your business profit and cash flow respond to unexpected shocks such as demand drops, cost increases, or delayed payments.  
+This tool helps you simulate how your business profit and cash flow respond to shocks like drops in demand, cost increases, or delayed payments.  
             
 Enter your variables to evaluate your business resilience!
 """)
@@ -161,9 +161,9 @@ if st.session_state.get("last_preset", None) != preset:
 col5, col6 = st.columns(2)
 with col5:
     demand_drop = st.slider("Demand Drop (%)", 0, 100, step=5, key="demand_drop")
-    payment_delay_months = st.slider("Payment Delay (Months)", 0, 6, st.session_state["payment_delay_months"], key="payment_delay_months")
+    payment_delay_months = st.slider("Payment Delay (Months)", 0, 12, st.session_state["payment_delay_months"], key="payment_delay_months")
 with col6:
-    cost_increase = st.slider("Variable Cost Increase (%)", 0, 100, st.session_state["cost_increase"], step=5, key="cost_increase")
+    cost_increase = st.slider("Cost Increase (%)", 0, 100, st.session_state["cost_increase"], step=5, key="cost_increase")
     regulation_cost = st.number_input("One-off Regulatory Cost (£)", min_value=0, value=st.session_state["regulation_cost"], step=1_000_000, key="regulation_cost")
 
 # --- Simulation Length ---
@@ -177,7 +177,7 @@ sim_length = st.radio(
 )
 
 # --- Scenario Simulation ---
-st.header("4. Scenario Simulation Results")
+st.header("4. Scenario Simulation")
 
 # Baseline calculations
 annual_profit = revenue - fixed_costs - variable_costs
@@ -230,7 +230,7 @@ st.subheader("Resilience Insights")
 insights = []
 
 if shock_profit < 0:
-    insights.append("🔴 **Warning:** Your business is not profitable under the shocked scenario. Consider cost-saving measures or new revenue sources.")
+    insights.append("🔴 **Warning:** Your business is not profitable under the shocked scenario. Cost-saving measures or new revenue sources required.")
 else:
     profit_change = shock_profit - annual_profit
     if profit_change < 0:
@@ -238,20 +238,20 @@ else:
         if percent_drop < 10:
             insights.append("🟡 **Minor impact:** Profit declines slightly under shock, but business remains resilient.")
         elif percent_drop < 30:
-            insights.append("🟠 **Moderate impact:** Significant drop in profit. Caution: monitor closely and explore mitigations.")
+            insights.append("🟠 **Moderate impact:** Significant drop in profit simulated.")
         else:
-            insights.append("🔴 **Major impact:** Profit drops sharply. Review strategies for resilience.")
+            insights.append("🔴 **Major impact:** Profit drops sharply. Resilience strategies necessary.")
     else:
         insights.append("🟢 **No negative impact:** Your profit increases under this scenario.")
 
 if min(shock_cashflow) < 0:
     negative_month = months[shock_cashflow.index(min(shock_cashflow))]
-    insights.append(f"🔴 **Critical:** Cash runs out in month {negative_month} of the simulation. Immediate changes required to avoid insolvency.")
+    insights.append(f"🔴 **Critical:** Cash runs out in month {negative_month} of the simulation. Changes required to avoid bankruptcy.")
 else:
     if shock_profit >= 0:
-        insights.append("🟢 **Strong cash position:** Cash remains positive throughout the simulation under shock.")
+        insights.append("🟢 **Strong cash position:** Cash remains positive in this simulation.")
     else:
-        insights.append("🟡 **Cash positive but unprofitable:** You remain solvent for now, but review your profit model.")
+        insights.append("🟡 **Cash positive but unprofitable:** Your business requires changes to be profitable.")
 
 for insight in insights:
     st.markdown(insight)
